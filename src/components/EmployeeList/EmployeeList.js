@@ -1,26 +1,32 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
+import Button from '@material-ui/core/Button';
 
-class EmployeeList extends Component {
-  render() {
-    let employeeList = this.props.employeeList
-
-    return (
-      <ul>
-        {employeeList.map(employee => (
-          <li key={employee.idNumber}>
-            {`${employee.firstName}
-            ${employee.lastName}
-            is the ${employee.jobTitle}
-            and makes ${employee.annualSalary}`}
-            <button onClick={() => deleteEmployee(employee)}>
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
-    );
+  const deleteEmployee = (props, employee) =>
+  {
+    props.dispatch({
+      type: 'DELETE_EMPLOYEE',
+      payload: employee,
+    })
   }
-}
 
+const EmployeeList = (props) =>
+  (
+    <ul>
+      {props.state.map(employee => (
+        <li key={employee.idNumber}>
+          {`${employee.firstName}
+          ${employee.lastName}
+          is a ${employee.jobTitle}
+          and makes ${employee.annualSalary}.`}
+          <Button size="small" color="primary" variant="outlined"  style={{margin: .5 + "rem"}} onClick={() => deleteEmployee(props, employee)}>
+            Delete
+          </Button>
+        </li>
+      ))}
+    </ul>
+  )
 
-export default EmployeeList;
+const mapStateToProps = (state) => ({ state })
+
+export default connect(mapStateToProps)(EmployeeList);

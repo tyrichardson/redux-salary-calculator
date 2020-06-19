@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Input, TextField } from '@material-ui/core';
 
 const emptyEmployeeObject = {
   firstName: '',
@@ -17,9 +19,17 @@ class EmployeeForm extends Component {
     });
   }
 
+  addEmployee = (newEmployee) =>
+  {
+    this.props.dispatch({
+      type: 'ADD_EMPLOYEE',
+      payload: newEmployee,
+    });
+  }
+
   handleSubmit = (event) => {
     event.preventDefault();
-    this.props.addEmployee(this.state);
+    this.addEmployee(this.state);
     this.clearEmployeeFields();
   }
 
@@ -30,15 +40,32 @@ class EmployeeForm extends Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <input onChange={this.handleChange} placeholder="First Name" value={this.state.firstName} name="firstName" />
-        <input onChange={this.handleChange} placeholder="Last Name" value={this.state.lastName} name="lastName" />
-        <input onChange={this.handleChange} placeholder="ID Number" value={this.state.idNumber} name="idNumber" />
-        <input onChange={this.handleChange} placeholder="Job Title" value={this.state.jobTitle} name="jobTitle" />
-        <input onChange={this.handleChange} placeholder="Annual Salary" value={this.state.annualSalary} name="annualSalary" />
-        <input type="submit" value="Submit" />
+        <TextField onChange={this.handleChange} value={this.state.firstName} name="firstName" required
+        label="first name"
+        variant="outlined"
+        color="secondary" />
+        <TextField onChange={this.handleChange} value={this.state.lastName} name="lastName" required
+        label="last name"
+        variant="outlined"
+        color="secondary"/>
+        <TextField onChange={this.handleChange} value={this.state.idNumber} name="idNumber" required
+        label="id number"
+        variant="outlined"
+        color="secondary"/>
+        <TextField onChange={this.handleChange} value={this.state.jobTitle} name="jobTitle" required
+        label="job title"
+        variant="outlined"
+        color="secondary"/>
+        <TextField onChange={this.handleChange} value={this.state.annualSalary} name="annualSalary" required label="yearly salary"
+        variant="outlined"
+        color="secondary"/>
+
+        <Input type="submit" value="Submit" color="primary" style={{margin: 1 + "rem" }} />
       </form>
     );
   }
 }
 
-export default EmployeeForm;
+const mapStateToProps = (state) => ({ state })
+
+export default connect(mapStateToProps)(EmployeeForm);
